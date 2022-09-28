@@ -5,6 +5,7 @@ import org.setu.placemark.console.models.PlacemarkModel
 
 private val logger = KotlinLogging.logger {}
 
+var placemark = PlacemarkModel()
 val placemarks = ArrayList<PlacemarkModel>()
 
 fun main(args: Array<String>) {
@@ -74,29 +75,36 @@ fun updatePlacemark() {
     listPlacemarks()
     var searchId = getId()
     val aPlacemark = search(searchId)
+    var tempTitle : String?
+    var tempDescription : String?
 
     if(aPlacemark != null) {
         print("Enter a new Title for [ " + aPlacemark.title + " ] : ")
-        aPlacemark.title = readLine()!!
+        tempTitle = readLine()!!
         print("Enter a new Description for [ " + aPlacemark.description + " ] : ")
-        aPlacemark.description = readLine()!!
-        if (aPlacemark.title.isNotEmpty() && aPlacemark.description.isNotEmpty()) {
+        tempDescription = readLine()!!
+
+        if (!tempTitle.isNullOrEmpty() && !tempDescription.isNullOrEmpty()) {
+            aPlacemark.title = tempTitle
+            aPlacemark.description = tempDescription
             println(
                 "You updated [ " + aPlacemark.title + " ] for title " +
-                        "and [ " + aPlacemark.description + " ] for description"
-            )
-        } else println("No new details were added")
-
+                        "and [ " + aPlacemark.description + " ] for description")
+            logger.info("Placemark Updated : [ $aPlacemark ]")
+        }
+        else
+            logger.info("Placemark Not Updated")
     }
     else
         println("Placemark Not Updated...")
 }
 
 fun listPlacemarks() {
-    println("List All Placemarks")
+    println("List All Placemark [ $placemarks ] ")
     println()
-    placemarks.forEach { logger.info("${it}") }
+    placemarks.forEach { logger.info("$it") }
     println()
+
 }
 
 fun searchPlacemark() {

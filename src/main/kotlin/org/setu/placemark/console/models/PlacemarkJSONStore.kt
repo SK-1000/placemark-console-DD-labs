@@ -59,6 +59,8 @@ class PlacemarkJSONStore : PlacemarkStore {
         placemarks.forEach { logger.info("${it}") }
     }
 
+
+
     private fun serialize() {
         val jsonString = gsonBuilder.toJson(placemarks, listType)
         write(JSON_FILE, jsonString)
@@ -67,5 +69,10 @@ class PlacemarkJSONStore : PlacemarkStore {
     private fun deserialize() {
         val jsonString = read(JSON_FILE)
         placemarks = Gson().fromJson(jsonString, listType)
+    }
+
+    override fun delete(placemark: PlacemarkModel) {
+        placemarks.remove(placemark)
+        serialize()
     }
 }
